@@ -2,16 +2,7 @@
 
 Java ile nesneye yönelik programlama (NYP) prensiplerini gösteren bir teslimat simülasyon motoru.
 
-## Çalıştırma
 
-### Kolay yol (Windows)
-Proje klasöründeki `derle_ve_calistir.bat` dosyasına çift tıklayın.
-
-### Komut satırı
-```bat
-javac -encoding UTF-8 -d out (Get-ChildItem -Recurse src\*.java).FullName
-java -Dfile.encoding=UTF-8 -cp out lojistik.Main
-```
 
 ## Klasör Yapısı
 ```
@@ -104,25 +95,24 @@ src/lojistik/
 
 
 
-## UML Diyagramı (Görsel)
 
 ```mermaid
 classDiagram
     direction TB
 
-    %% Arayüz ve Loglama Katmanı
     class ILogger {
         <<interface>>
         +bilgiYaz(mesaj: String) void
         +hataYaz(mesaj: String) void
     }
+
     class KonsolLogger {
         +bilgiYaz(mesaj: String) void
         +hataYaz(mesaj: String) void
     }
+
     ILogger <|.. KonsolLogger : implements
 
-    %% Veri Modelleri (Model)
     class Konum {
         -int x
         -int y
@@ -135,82 +125,12 @@ classDiagram
         -Konum konum
         -boolean darSokakMi
     }
+
     Musteri --> Konum
-
-    class Paket {
-        -double agirlik
-        -String icerik
-        -PaketDurumu durum
-        -Musteri hedefMusteri
-    }
-    
-    class PaketDurumu {
-        <<enumeration>>
-        HAZIRLANIYOR
-        YOLDA
-        TESLIM_EDILDI
-    }
-    Paket --> PaketDurumu
-    Paket --> Musteri
-
-    %% Soyut Sınıf ve Araç Katmanı
-    class Arac {
-        <<abstract>>
-        #plaka: String
-        #kapasite: double
-        #yakit: double
-        #hiz: double
-        #konum: Konum
-        #logger: ILogger
-        +teslimatYap(Musteri m, Paket p)* boolean
-        +yakitIkmal() void
-        #yakitTuket(mesafe: double) void
-        #yakitKontrolEt(gereken: double) void
-        #kapasiteUygunMu(Paket p) boolean
-    }
-    Arac --> Konum
-    Arac --> ILogger
-
-    class Kamyon {
-        +teslimatYap(Musteri m, Paket p) boolean
-    }
-    class Motor {
-        +teslimatYap(Musteri m, Paket p) boolean
-    }
-    class Drone {
-        +teslimatYap(Musteri m, Paket p) boolean
-    }
-
-    Arac <|-- Kamyon : extends
-    Arac <|-- Motor : extends
-    Arac <|-- Drone : extends
-
-    %% Özel İstisna ve Sistem Katmanı
-    class AgirPaketException {
-        <<exception>>
-    }
-    Exception <|-- AgirPaketException : extends
-    Drone ..> AgirPaketException : throws
-
-    class LojistikSistemi {
-        -ArrayList~Musteri~ musteriListesi
-        -ArrayList~Arac~ araclarListesi
-        -ArrayList~Paket~ paketKuyrugu
-        -ILogger logger
-        +musteriEkle(Musteri m) void
-        +aracEkle(Arac a) void
-        +paketiKuyrugaEkle(Paket p) void
-        +paketiKuyruktanCek() Paket
-        +teslimatlariBaslat() void
-    }
-    LojistikSistemi --> Musteri : musteriListesi
-    LojistikSistemi --> Arac : aracListesi (POLIMORFIZM)
-    LojistikSistemi --> Paket : paketKuyrugu (FIFO)
-    LojistikSistemi --> ILogger : loglama ```
+```
 
 ## Proje Raporu Açıklama Metni
 
-> Bu bölüm doğrudan ödev raporuna eklenebilir.
 
 Bu projede, bir şehrin lojistik dağıtım ağını modelleyen nesneye yönelik bir
 simülasyon motoru geliştirilmiştir. Sistemin temelinde, tüm araçların ortak
